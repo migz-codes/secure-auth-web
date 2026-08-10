@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
-import { SignIn } from '@/components/pages/SignIn'
+import { Auth } from '@/components/pages/Auth'
 
 export const metadata: Metadata = { title: 'Sign in' }
 
-export default SignIn
+export default Auth
