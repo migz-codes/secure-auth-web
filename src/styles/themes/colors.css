@@ -1,16 +1,16 @@
 @theme {
   /* Primary */
-  --color-primary-50: rgb(255 255 255);
-  --color-primary-100: rgb(255 255 255);
-  --color-primary-200: rgb(224 226 255);
-  --color-primary-300: rgb(184 186 255);
-  --color-primary-400: rgb(143 147 255);
+  --color-primary-50: rgb(240 241 255);
+  --color-primary-100: rgb(224 226 255);
+  --color-primary-200: rgb(194 197 255);
+  --color-primary-300: rgb(163 168 255);
+  --color-primary-400: rgb(133 137 255);
   --color-primary-500: rgb(102 108 255);
-  --color-primary-600: rgb(46 54 255);
-  --color-primary-700: rgb(0 10 245);
-  --color-primary-800: rgb(0 7 189);
-  --color-primary-900: rgb(0 5 133);
-  --color-primary-950: rgb(0 4 105);
+  --color-primary-600: rgb(81 57 239);
+  --color-primary-700: rgb(76 31 214);
+  --color-primary-800: rgb(76 27 167);
+  --color-primary-900: rgb(65 21 121);
+  --color-primary-950: rgb(51 16 86);
 
   /* Secondary */
   --color-secondary-50: rgb(255 255 255);

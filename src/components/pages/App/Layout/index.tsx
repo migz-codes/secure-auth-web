@@ -1,11 +1,11 @@
 import '@/styles/globals.css'
-import { Roboto } from 'next/font/google'
+import { Fira_Code } from 'next/font/google'
 import type { IAppLayoutProps } from './types'
 
-const roboto = Roboto({ subsets: ['latin'], variable: '--roboto-font' })
+const firaCode = Fira_Code({ subsets: ['latin'], variable: '--fira-code-font' })
 
 export const AppLayout = ({ children }: Readonly<IAppLayoutProps>) => (
   <html lang='en'>
-    <body className={`${roboto.variable}`}>{children}</body>
+    <body className={`${firaCode.variable}`}>{children}</body>
   </html>
 )

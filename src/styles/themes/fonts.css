@@ -1,6 +1,6 @@
 @theme {
   --font-*: initial;
-  --font-primary: var(--roboto-font);
+  --font-primary: var(--fira-code-font);
 }
 
 @utility font-primary {

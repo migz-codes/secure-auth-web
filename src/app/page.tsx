@@ -1,6 +1,6 @@
 import type { Metadata } from 'next'
-import { Home } from '@/components/pages/Home'
+import { SignIn } from '@/components/pages/SignIn'
 
-export const metadata: Metadata = { title: 'Home' }
+export const metadata: Metadata = { title: 'Sign in' }
 
-export default Home
+export default SignIn
