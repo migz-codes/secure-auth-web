@@ -1,0 +1,8 @@
+@theme {
+  --font-*: initial;
+  --font-primary: var(--roboto-font);
+}
+
+@utility font-primary {
+  font-family: var(--font-primary);
+}

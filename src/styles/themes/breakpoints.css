@@ -1,0 +1,25 @@
+@theme {
+  /* Breakpoints */
+  --breakpoints-*: initial;
+  --breakpoint-xs: 320px;
+  --breakpoint-xs2: 360px;
+  --breakpoint-xs3: 375px;
+  --breakpoint-sm: 460px;
+  --breakpoint-sm2: 520px;
+  --breakpoint-sm3: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-md2: 800px;
+  --breakpoint-lg: 920px;
+  --breakpoint-lg2: 990px;
+  --breakpoint-lg3: 1100px;
+  --breakpoint-xl: 1200px;
+  --breakpoint-xl2: 1320px;
+  --breakpoint-xl3: 1440px;
+  --breakpoint-xl4: 1600px;
+
+  /* Height-based breakpoints */
+  --breakpoint-hxs: (min-height: 540px);
+  --breakpoint-hsm: (min-height: 640px);
+  --breakpoint-hmd: (min-height: 768px);
+  --breakpoint-hlg: (min-height: 1080px);
+}
