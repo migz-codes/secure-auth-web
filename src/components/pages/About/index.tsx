@@ -1,4 +1,5 @@
 import { AboutCollapse } from './Collapse'
+import { AboutFlow } from './Flow'
 
 export const About = () => (
   <div className='min-h-screen flex flex-col gap-y-[32px] bg-primary-500 p-[16px]'>
@@ -271,6 +272,149 @@ Origin: https://app.site.com
         </div>
       </AboutCollapse>
 
+      <AboutCollapse title='CORS'>
+        <div className='flex flex-col gap-y-[24px]'>
+          <p>
+            A regra base do navegador é a Same-Origin Policy: código de uma origem não lê resposta
+            de outra. Sem ela, qualquer site aberto numa aba leria seu email e seu banco. CORS é a
+            exceção controlada, e quem autoriza é o servidor que recebe a chamada, nunca a página
+            que faz.
+          </p>
+
+          <p>
+            Este projeto precisa dele porque app e API vivem em hosts diferentes. Mesmo site,
+            origens diferentes.
+          </p>
+
+          <div className='flex flex-col'>
+            <AboutCollapse variant='item' title='Origem não é site'>
+              <div className='flex flex-col gap-y-[12px]'>
+                <p>
+                  Origem é a trinca esquema, host e porta. Qualquer diferença nas três faz outra
+                  origem:
+                </p>
+
+                <pre className='overflow-x-auto rounded-[8px] bg-gray-100 p-[16px] text-[13px] leading-[1.5]'>
+                  <code>
+                    {`https://app.site.com    origem A
+https://api.site.com    origem B, host diferente
+http://app.site.com     origem C, esquema diferente
+https://app.site.com:8080  origem D, porta diferente`}
+                  </code>
+                </pre>
+
+                <p>
+                  Site é outra conta, feita só no domínio registrável e ignorando porta. Por isso as
+                  quatro linhas acima são o mesmo site, e é isso que deixa{' '}
+                  <code className='text-[14px]'>SameSite=Lax</code> funcionar aqui.
+                </p>
+
+                <p>
+                  Same-site resolve cookie. Same-origin resolve leitura. As duas contas são
+                  diferentes e as duas precisam ser resolvidas.
+                </p>
+              </div>
+            </AboutCollapse>
+
+            <AboutCollapse variant='item' title='CORS não bloqueia o envio'>
+              <div className='flex flex-col gap-y-[12px]'>
+                <p>
+                  O mal-entendido mais caro da área. Numa requisição simples, o navegador manda
+                  primeiro e checa depois: o servidor recebe, executa e grava no banco. Só então o
+                  navegador olha o <code className='text-[14px]'>Access-Control-Allow-Origin</code>{' '}
+                  e, se não bater, esconde a resposta do JavaScript.
+                </p>
+
+                <p>
+                  O erro vermelho no console significa &quot;você não pode ler isto&quot;, não
+                  &quot;isto não aconteceu&quot;.
+                </p>
+
+                <p>
+                  Consequência direta: CORS não é defesa contra CSRF. O ataque do formulário
+                  invisível nunca quis ler a resposta, ele queria a transferência. Quem barra aquilo
+                  é <code className='text-[14px]'>SameSite</code>, o token de CSRF e a checagem de{' '}
+                  <code className='text-[14px]'>Origin</code>.
+                </p>
+              </div>
+            </AboutCollapse>
+
+            <AboutCollapse variant='item' title='Preflight OPTIONS'>
+              <div className='flex flex-col gap-y-[12px]'>
+                <p>
+                  Quando a requisição sai do feijão com arroz, o navegador pergunta antes de mandar.
+                  Dispara preflight se o método for <code className='text-[14px]'>PUT</code>,{' '}
+                  <code className='text-[14px]'>PATCH</code> ou{' '}
+                  <code className='text-[14px]'>DELETE</code>, se o{' '}
+                  <code className='text-[14px]'>Content-Type</code> for{' '}
+                  <code className='text-[14px]'>application/json</code>, ou se houver header
+                  personalizado como <code className='text-[14px]'>X-CSRF-Token</code>.
+                </p>
+
+                <pre className='overflow-x-auto rounded-[8px] bg-gray-100 p-[16px] text-[13px] leading-[1.5]'>
+                  <code>
+                    {`OPTIONS /auth/logout
+Origin: https://app.site.com
+Access-Control-Request-Method: POST
+Access-Control-Request-Headers: x-csrf-token
+
+204 No Content
+Access-Control-Allow-Origin: https://app.site.com
+Access-Control-Allow-Credentials: true
+Access-Control-Allow-Headers: Content-Type, X-CSRF-Token
+Access-Control-Max-Age: 600`}
+                  </code>
+                </pre>
+
+                <p>
+                  Aqui o preflight vira defesa de graça: um{' '}
+                  <code className='text-[14px]'>&lt;form&gt;</code> HTML não sabe fazer OPTIONS nem
+                  mandar header personalizado, então nem chega a tentar. E se{' '}
+                  <code className='text-[14px]'>X-CSRF-Token</code> faltar em{' '}
+                  <code className='text-[14px]'>Allow-Headers</code>, toda mutação do app morre no
+                  preflight, antes do login sequer aparecer no log.
+                </p>
+              </div>
+            </AboutCollapse>
+
+            <AboutCollapse variant='item' title='Credenciais endurecem as regras'>
+              <div className='flex flex-col gap-y-[12px]'>
+                <p>
+                  Com <code className='text-[14px]'>credentials: &apos;include&apos;</code> no
+                  cliente, o navegador passa a exigir duas coisas do servidor:{' '}
+                  <code className='text-[14px]'>Access-Control-Allow-Credentials: true</code> e um{' '}
+                  <code className='text-[14px]'>Allow-Origin</code> com a origem exata.{' '}
+                  <code className='text-[14px]'>&apos;*&apos;</code> deixa de ser aceito.
+                </p>
+
+                <p>
+                  A saída preguiçosa é refletir a origem de quem chamou. É o mesmo que autorizar
+                  todo mundo, com a diferença de continuar passando com credenciais: qualquer site
+                  passa a ler respostas autenticadas da vítima. Isso é tomada de conta, não
+                  configuração.
+                </p>
+
+                <pre className='overflow-x-auto rounded-[8px] bg-gray-100 p-[16px] text-[13px] leading-[1.5]'>
+                  <code>
+                    {`app.enableCors({
+  credentials: true,
+  origin: corsOrigin.split(',').map((value) => value.trim()),
+  allowedHeaders: ['Content-Type', 'Accept', 'X-CSRF-Token']
+})`}
+                  </code>
+                </pre>
+
+                <p>
+                  A allowlist vem de <code className='text-[14px]'>CORS_ORIGIN</code>, validada no
+                  schema de env. Lista fixa, nunca <code className='text-[14px]'>origin: true</code>
+                  .
+                </p>
+              </div>
+            </AboutCollapse>
+          </div>
+        </div>
+      </AboutCollapse>
+
       <AboutCollapse title='Cookies'>
         <div className='flex flex-col gap-y-[24px]'>
           <p>
@@ -504,6 +648,114 @@ Origin: https://app.site.com
                   A saída é o par de tokens. O access vale 15 minutos, então uma revogação demora no
                   máximo isso para valer. O refresh vale 14 dias mas tem linha no banco, e nesse a
                   revogação é imediata: apagar a linha basta.
+                </p>
+              </div>
+            </AboutCollapse>
+          </div>
+        </div>
+      </AboutCollapse>
+
+      <AboutCollapse title='Rate limiting'>
+        <div className='flex flex-col gap-y-[24px]'>
+          <p>
+            Nada do que veio antes impede alguém de simplesmente tentar. Senha certa entra, e um
+            script paciente testa milhares por minuto até achar uma. Rate limiting é o que
+            transforma &quot;infinitas tentativas&quot; em &quot;algumas tentativas&quot;.
+          </p>
+
+          <p>
+            Vale para login, registro e refresh, que são as rotas onde tentar de novo tem valor para
+            o atacante.
+          </p>
+
+          <div className='flex flex-col'>
+            <AboutCollapse variant='item' title='Baseline global mais limite por rota'>
+              <div className='flex flex-col gap-y-[12px]'>
+                <p>
+                  Duas camadas: um teto largo para toda a API, que segura abuso genérico, e um teto
+                  apertado nas rotas de autenticação.
+                </p>
+
+                <pre className='overflow-x-auto rounded-[8px] bg-gray-100 p-[16px] text-[13px] leading-[1.5]'>
+                  <code>
+                    {`// global
+ThrottlerModule.forRoot([{ ttl: 60_000, limit: 100 }])
+
+// na rota de login
+@Throttle({ default: { ttl: 60_000, limit: 5 } })
+@Post('login')`}
+                  </code>
+                </pre>
+
+                <p>
+                  Cinco tentativas por minuto não incomoda quem errou a senha duas vezes, e derruba
+                  um script que dependia de milhares.
+                </p>
+              </div>
+            </AboutCollapse>
+
+            <AboutCollapse variant='item' title='Por IP não é suficiente'>
+              <div className='flex flex-col gap-y-[12px]'>
+                <p>
+                  Limite por IP resolve um atacante numa máquina. Não resolve credential stuffing,
+                  que é o ataque real hoje: uma lista de emails e senhas vazados de outro site,
+                  testada a partir de milhares de IPs residenciais, uma tentativa em cada.
+                </p>
+
+                <p>
+                  Cada IP fica bem abaixo do limite e o ataque inteiro passa. Por isso existe o
+                  segundo contador, por conta: falhas consecutivas no mesmo email, independente de
+                  onde vieram, e bloqueio temporário quando estoura.
+                </p>
+
+                <p>
+                  Os dois contam coisas diferentes. Por IP mede &quot;esta máquina está tentando
+                  demais&quot;, por conta mede &quot;esta conta está sendo atacada&quot;.
+                </p>
+              </div>
+            </AboutCollapse>
+
+            <AboutCollapse variant='item' title='Atrás de proxy'>
+              <div className='flex flex-col gap-y-[12px]'>
+                <p>
+                  Em produção quem fala com a API é o load balancer, então todo request chega com o
+                  IP dele. Sem configurar, o limitador vê um cliente só e o primeiro usuário a errar
+                  a senha bloqueia todos os outros.
+                </p>
+
+                <pre className='overflow-x-auto rounded-[8px] bg-gray-100 p-[16px] text-[13px] leading-[1.5]'>
+                  <code>{"app.set('trust proxy', 1)"}</code>
+                </pre>
+
+                <p>
+                  O <code className='text-[14px]'>1</code> é o número de proxies confiáveis à
+                  frente. Confiar em mais camadas do que existem é pior que não confiar em nenhuma:
+                  o cliente passa a poder inventar o próprio{' '}
+                  <code className='text-[14px]'>X-Forwarded-For</code> e trocar de identidade a cada
+                  tentativa.
+                </p>
+              </div>
+            </AboutCollapse>
+
+            <AboutCollapse variant='item' title='O que responder ao estourar'>
+              <div className='flex flex-col gap-y-[12px]'>
+                <p>
+                  <code className='text-[14px]'>429 Too Many Requests</code>, com{' '}
+                  <code className='text-[14px]'>Retry-After</code> dizendo em quantos segundos vale
+                  tentar de novo. Cliente honesto usa a informação, script ignora e continua batendo
+                  na parede.
+                </p>
+
+                <p>
+                  Detalhe fácil de errar: o limitador não pode virar oráculo. Se o bloqueio por
+                  conta só aparece para email cadastrado, o 429 vira a resposta que diz quais emails
+                  existem, desfazendo o cuidado do 401 genérico e do hash de mentira.
+                </p>
+
+                <p>
+                  E rate limiting não substitui o custo do bcrypt. Ele limita tentativas contra a
+                  API; o cost factor é o que segura quem já levou o banco de hashes embora e testa
+                  offline, onde nenhum limite seu alcança.
                 </p>
               </div>
             </AboutCollapse>
@@ -1184,6 +1436,19 @@ fetch(\`\${apiUrl}/auth/logout\`, {
               </div>
             </AboutCollapse>
           </div>
+        </div>
+      </AboutCollapse>
+    </AboutCollapse>
+
+    <AboutCollapse variant='section' defaultOpen title='Fluxo'>
+      <AboutCollapse defaultOpen title='Login, passo a passo'>
+        <div className='flex flex-col gap-y-[24px]'>
+          <p>
+            O resto da página em ordem cronológica, do clique em entrar até a requisição autenticada
+            seguinte. Cada passo diz de que lado acontece e o que ele impede.
+          </p>
+
+          <AboutFlow />
         </div>
       </AboutCollapse>
     </AboutCollapse>
