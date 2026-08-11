@@ -1,13 +1,33 @@
 'use client'
 
 import { useId, useState } from 'react'
+import type { IChildrenProps } from '@/types/react.types'
 import { tw } from '@/utils/tailwind'
-import type { IAboutCollapseProps, TAboutCollapseVariant } from './types'
+
+/**
+ * `section` groups top-level topics, `card` is one topic and `item` a plain
+ * subsection inside one. `attribute` and `option` render the title as code: a
+ * cookie attribute and one of its possible values.
+ */
+export type TAboutCollapseVariant = 'section' | 'card' | 'item' | 'attribute' | 'option'
+
+export interface IAboutCollapseProps extends IChildrenProps {
+  title: string
+  variant?: TAboutCollapseVariant
+  defaultOpen?: boolean
+}
 
 const VARIANTS: Record<
   TAboutCollapseVariant,
   { root: string; header: string; title: string; chevron: string; content: string }
 > = {
+  section: {
+    root: 'w-full',
+    header: 'px-[4px] py-[8px] text-white',
+    title: 'text-[13px] font-[600] tracking-[0.08em] uppercase',
+    chevron: 'w-[16px] h-[16px]',
+    content: 'flex flex-col gap-y-[16px] pt-[12px]'
+  },
   card: {
     root: 'w-full rounded-[8px] bg-white',
     header: 'p-[24px]',
@@ -39,10 +59,15 @@ const VARIANTS: Record<
   }
 }
 
-export const AboutCollapse = ({ title, children, variant = 'card' }: IAboutCollapseProps) => {
+export const AboutCollapse = ({
+  title,
+  children,
+  variant = 'card',
+  defaultOpen = false
+}: IAboutCollapseProps) => {
   const contentId = useId()
   const styles = VARIANTS[variant]
-  const [isOpen, setIsOpen] = useState(false)
+  const [isOpen, setIsOpen] = useState(defaultOpen)
 
   const Title = variant === 'attribute' || variant === 'option' ? 'code' : 'span'
 

@@ -4,7 +4,11 @@ import Link from 'next/link'
 import type { FormEvent } from 'react'
 import { useState } from 'react'
 import { AuthField } from '../Field'
-import type { IAuthSignInProps } from './types'
+
+export interface IAuthSignInProps {
+  inert?: boolean
+  onSwitch: () => void
+}
 
 export const AuthSignIn = ({ inert, onSwitch }: IAuthSignInProps) => {
   const [email, setEmail] = useState('')
@@ -62,10 +66,10 @@ export const AuthSignIn = ({ inert, onSwitch }: IAuthSignInProps) => {
       </button>
 
       <Link
-        href='/sobre'
+        href='/about'
         className='text-[14px] text-gray-400 text-center underline underline-offset-[4px] hover:text-primary-600'
       >
-        Sobre
+        Como funciona
       </Link>
     </form>
   )

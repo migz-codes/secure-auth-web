@@ -1,4 +1,9 @@
-import type { IAuthFieldProps } from './types'
+import type { TInputProps } from '@/types/react.types'
+
+export interface IAuthFieldProps extends TInputProps {
+  id: string
+  label: string
+}
 
 export const AuthField = ({ id, label, ...props }: IAuthFieldProps) => (
   <div className='flex flex-col gap-y-[8px]'>

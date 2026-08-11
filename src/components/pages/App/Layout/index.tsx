@@ -1,6 +1,9 @@
 import '@/styles/globals.css'
 import { Fira_Code } from 'next/font/google'
-import type { IAppLayoutProps } from './types'
+
+export interface IAppLayoutProps {
+  children: React.ReactNode
+}
 
 const firaCode = Fira_Code({ subsets: ['latin'], variable: '--fira-code-font' })
 

@@ -1,9 +1,8 @@
 import { AboutCollapse } from './Collapse'
-import { AboutSection } from './Section'
 
 export const About = () => (
   <div className='min-h-screen flex flex-col gap-y-[32px] bg-primary-500 p-[16px]'>
-    <AboutSection title='Informações'>
+    <AboutCollapse variant='section' defaultOpen title='Informações'>
       <AboutCollapse title='HTTP'>
         <div className='flex flex-col gap-y-[24px]'>
           <p>
@@ -511,9 +510,9 @@ Origin: https://app.site.com
           </div>
         </div>
       </AboutCollapse>
-    </AboutSection>
+    </AboutCollapse>
 
-    <AboutSection title='Ataques'>
+    <AboutCollapse variant='section' defaultOpen title='Ataques'>
       <AboutCollapse title='XSS'>
         <div className='flex flex-col gap-y-[16px]'>
           <p>
@@ -643,9 +642,9 @@ Origin: https://app.site.com
           </div>
         </div>
       </AboutCollapse>
-    </AboutSection>
+    </AboutCollapse>
 
-    <AboutSection title='Proteções'>
+    <AboutCollapse variant='section' defaultOpen title='Proteções'>
       <AboutCollapse title='Como prevenir XSS no NestJS'>
         <div className='flex flex-col gap-y-[16px]'>
           <p>
@@ -1187,6 +1186,6 @@ fetch(\`\${apiUrl}/auth/logout\`, {
           </div>
         </div>
       </AboutCollapse>
-    </AboutSection>
+    </AboutCollapse>
   </div>
 )

@@ -3,7 +3,11 @@
 import type { FormEvent } from 'react'
 import { useState } from 'react'
 import { AuthField } from '../Field'
-import type { IAuthSignUpProps } from './types'
+
+export interface IAuthSignUpProps {
+  inert?: boolean
+  onSwitch: () => void
+}
 
 export const AuthSignUp = ({ inert, onSwitch }: IAuthSignUpProps) => {
   const [name, setName] = useState('')

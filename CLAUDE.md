@@ -55,14 +55,12 @@ One component per folder, always `index.tsx`, always a **named export**. `defaul
 src/components/pages/Auth/
 ├── index.tsx          → export const Auth
 ├── Field/
-│   ├── index.tsx      → export const AuthField
-│   └── types.ts       → export interface IAuthFieldProps
+│   └── index.tsx      → export const AuthField + IAuthFieldProps
 └── SignIn/
-    ├── index.tsx      → export const AuthSignIn
-    └── types.ts       → export interface IAuthSignInProps
+    └── index.tsx      → export const AuthSignIn + IAuthSignInProps
 ```
 
-- Props interfaces live in a sibling `types.ts`, named `I<ComponentName>Props`. Never inline the props type in `index.tsx`.
+- **No sibling `types.ts`.** The props interface is declared in `index.tsx`, above the component, named `I<ComponentName>Props` and exported. A folder holds one file.
 - Component names carry the folder path: `Auth/SignIn` exports `AuthSignIn`, `Auth/Field` exports `AuthField`.
 - Extend the shared helpers in `src/types/react.types.ts` (`TInputProps`, `TDivProps`, `TButtonProps`, `IChildrenProps`, …) instead of redeclaring DOM prop types.
 - `'use client'` goes on the leaf that owns state or handlers, not on a parent to cover its children.
