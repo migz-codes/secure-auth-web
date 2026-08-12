@@ -1,6 +1,7 @@
 import Link from 'next/link'
 import { dedent } from '@/utils/string'
 import { AboutCollapse } from './Collapse'
+import { AboutCurrentFlow } from './CurrentFlow'
 import { AboutFlow } from './Flow'
 
 export const About = () => (
@@ -1810,6 +1811,21 @@ export const About = () => (
           </p>
 
           <AboutFlow />
+        </div>
+      </AboutCollapse>
+    </AboutCollapse>
+
+    <AboutCollapse defaultOpen variant='section' title='Fluxo atual'>
+      <AboutCollapse defaultOpen title='O que o código faz hoje'>
+        <div className='flex flex-col gap-y-[24px]'>
+          <p>
+            A seção acima descreve o alvo. Esta descreve o estado atual do{' '}
+            <code className='text-[14px]'>secure-auth-api</code>, lido do código: as rotas que
+            existem, por onde toda requisição passa e o que acontece em cada uma. Os dois desenhos
+            divergem em pontos importantes, listados no fim.
+          </p>
+
+          <AboutCurrentFlow />
         </div>
       </AboutCollapse>
     </AboutCollapse>
