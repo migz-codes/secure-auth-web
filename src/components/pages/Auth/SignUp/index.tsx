@@ -3,17 +3,12 @@
 import type { FormEvent } from 'react'
 import { useState } from 'react'
 import { Field } from '@/components/shared/Field'
+import type { IUser } from '@/types/api.types'
 import { ApiError, apiFetch } from '@/utils/api'
 
 export interface IAuthSignUpProps {
   inert?: boolean
   onSwitch: () => void
-}
-
-export interface IUser {
-  id: string
-  name: string
-  email: string
 }
 
 export const AuthSignUp = ({ inert, onSwitch }: IAuthSignUpProps) => {

@@ -4,25 +4,21 @@ import Link from 'next/link'
 import type { FormEvent } from 'react'
 import { useState } from 'react'
 import { Field } from '@/components/shared/Field'
+import type { IUser } from '@/types/api.types'
 import { ApiError, apiFetch } from '@/utils/api'
+import { writeSession } from '@/utils/session'
 
 export interface IAuthSignInProps {
   inert?: boolean
   onSwitch: () => void
+  onSignedIn: (user: IUser) => void
 }
 
-export interface IUser {
-  id: string
-  name: string
-  email: string
-}
-
-export const AuthSignIn = ({ inert, onSwitch }: IAuthSignInProps) => {
+export const AuthSignIn = ({ inert, onSwitch, onSignedIn }: IAuthSignInProps) => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
   const [isSubmitting, setIsSubmitting] = useState(false)
-  const [signedInUser, setSignedInUser] = useState<IUser | null>(null)
 
   const handleSubmit = async (event: FormEvent<HTMLFormElement>) => {
     event.preventDefault()
@@ -33,13 +29,18 @@ export const AuthSignIn = ({ inert, onSwitch }: IAuthSignInProps) => {
     setIsSubmitting(true)
 
     try {
-      const { user } = await apiFetch<{ user: IUser }>('/auth/login', {
+      const session = await apiFetch<{
+        user: IUser
+        accessToken: string
+        refreshToken: string
+      }>('/auth/login', {
         method: 'POST',
         body: JSON.stringify({ email, password })
       })
 
-      setSignedInUser(user)
+      writeSession(session)
       setPassword('')
+      onSignedIn(session.user)
     } catch (exception) {
       if (!(exception instanceof ApiError)) {
         setError('Could not reach the server. Try again.')
@@ -89,12 +90,6 @@ export const AuthSignIn = ({ inert, onSwitch }: IAuthSignInProps) => {
         <span role='alert' className='text-[12px] text-error-500 font-[600]'>
           {error}
         </span>
-      )}
-
-      {signedInUser && (
-        <output className='text-[12px] text-primary-600 font-[600]'>
-          Signed in as {signedInUser.email}
-        </output>
       )}
 
       <button
