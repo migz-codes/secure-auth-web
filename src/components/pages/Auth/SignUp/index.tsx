@@ -2,7 +2,7 @@
 
 import type { FormEvent } from 'react'
 import { useState } from 'react'
-import { AuthField } from '../Field'
+import { Field } from '@/components/shared/Field'
 
 export interface IAuthSignUpProps {
   inert?: boolean
@@ -52,7 +52,7 @@ export const AuthSignUp = ({ inert, onSwitch }: IAuthSignUpProps) => {
 
       <h1 className='text-[32px] text-gray-700 font-[600]'>Sign up</h1>
 
-      <AuthField
+      <Field
         required
         name='name'
         type='text'
@@ -64,7 +64,7 @@ export const AuthSignUp = ({ inert, onSwitch }: IAuthSignUpProps) => {
         onChange={(event) => setName(event.target.value)}
       />
 
-      <AuthField
+      <Field
         required
         name='email'
         type='email'
@@ -76,7 +76,7 @@ export const AuthSignUp = ({ inert, onSwitch }: IAuthSignUpProps) => {
         onChange={(event) => setEmail(event.target.value)}
       />
 
-      <AuthField
+      <Field
         required
         name='password'
         type='password'
@@ -89,7 +89,7 @@ export const AuthSignUp = ({ inert, onSwitch }: IAuthSignUpProps) => {
       />
 
       <div className='flex flex-col gap-y-[8px]'>
-        <AuthField
+        <Field
           required
           type='password'
           name='confirmPassword'

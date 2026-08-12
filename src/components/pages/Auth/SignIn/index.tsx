@@ -3,7 +3,7 @@
 import Link from 'next/link'
 import type { FormEvent } from 'react'
 import { useState } from 'react'
-import { AuthField } from '../Field'
+import { Field } from '@/components/shared/Field'
 
 export interface IAuthSignInProps {
   inert?: boolean
@@ -26,7 +26,7 @@ export const AuthSignIn = ({ inert, onSwitch }: IAuthSignInProps) => {
     >
       <h1 className='text-[32px] text-gray-700 font-[600]'>Sign in</h1>
 
-      <AuthField
+      <Field
         id='signin-email'
         label='Email'
         name='email'
@@ -38,7 +38,7 @@ export const AuthSignIn = ({ inert, onSwitch }: IAuthSignInProps) => {
         placeholder='you@example.com'
       />
 
-      <AuthField
+      <Field
         id='signin-password'
         label='Password'
         name='password'

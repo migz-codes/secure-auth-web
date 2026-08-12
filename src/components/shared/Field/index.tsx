@@ -1,11 +1,11 @@
 import type { TInputProps } from '@/types/react.types'
 
-export interface IAuthFieldProps extends TInputProps {
+export interface IFieldProps extends TInputProps {
   id: string
   label: string
 }
 
-export const AuthField = ({ id, label, ...props }: IAuthFieldProps) => (
+export const Field = ({ id, label, ...props }: IFieldProps) => (
   <div className='flex flex-col gap-y-[8px]'>
     <label htmlFor={id} className='text-[14px] text-gray-400 font-[600]'>
       {label}
