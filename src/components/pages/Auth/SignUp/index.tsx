@@ -36,10 +36,6 @@ export const AuthSignUp = ({ inert, onSwitch }: IAuthSignUpProps) => {
     setIsSubmitting(true)
 
     try {
-      // Only `user` is read. The API still puts tokens in this body, but a
-      // token is never a value the client holds — it belongs in an httpOnly
-      // cookie. Sending anything beyond these three fields is a 400: the API's
-      // global ValidationPipe runs with forbidNonWhitelisted.
       const { user } = await apiFetch<{ user: IUser }>('/auth/register', {
         method: 'POST',
         body: JSON.stringify({ name, email, password })
@@ -55,8 +51,6 @@ export const AuthSignUp = ({ inert, onSwitch }: IAuthSignUpProps) => {
         return
       }
 
-      // A 400 carries the useful detail in validationErrors; its top-level
-      // message is only ever the generic 'Validation failed'.
       setError(exception.validationErrors?.[0] ?? exception.message)
     } finally {
       setIsSubmitting(false)

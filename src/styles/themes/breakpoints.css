@@ -1,5 +1,4 @@
 @theme {
-  /* Breakpoints */
   --breakpoints-*: initial;
   --breakpoint-xs: 320px;
   --breakpoint-xs2: 360px;
@@ -17,7 +16,6 @@
   --breakpoint-xl3: 1440px;
   --breakpoint-xl4: 1600px;
 
-  /* Height-based breakpoints */
   --breakpoint-hxs: (min-height: 540px);
   --breakpoint-hsm: (min-height: 640px);
   --breakpoint-hmd: (min-height: 768px);

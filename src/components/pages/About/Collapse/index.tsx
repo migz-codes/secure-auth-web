@@ -4,11 +4,6 @@ import { useId, useState } from 'react'
 import type { IChildrenProps } from '@/types/react.types'
 import { tw } from '@/utils/tailwind'
 
-/**
- * `section` groups top-level topics, `card` is one topic and `item` a plain
- * subsection inside one. `attribute` and `option` render the title as code: a
- * cookie attribute and one of its possible values.
- */
 export type TAboutCollapseVariant = 'section' | 'card' | 'item' | 'attribute' | 'option'
 
 export interface IAboutCollapseProps extends IChildrenProps {
@@ -103,8 +98,6 @@ export const AboutCollapse = ({
         </svg>
       </button>
 
-      {/* 0fr → 1fr animates the row to exactly the content height, which plain
-          height transitions cannot do without a hardcoded pixel value. */}
       <div
         id={contentId}
         inert={!isOpen}

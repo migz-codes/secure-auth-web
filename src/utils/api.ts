@@ -21,8 +21,6 @@ export class ApiError extends Error {
 }
 
 export const apiFetch = async <Data>(path: string, init?: RequestInit): Promise<Data> => {
-  // Credentials live in httpOnly cookies set by the API, so every call has to
-  // send them and CORS on the API side has to allow them.
   const response = await fetch(`${API_URL}${path}`, {
     ...init,
     credentials: 'include',
@@ -32,7 +30,6 @@ export const apiFetch = async <Data>(path: string, init?: RequestInit): Promise<
   const body = await response.json().catch(() => null)
 
   if (!response.ok) {
-    // The API wraps every failure as { errors: [{ status, message, ... }] }.
     const error: Partial<IApiErrorBody> | undefined = body?.errors?.[0]
 
     throw new ApiError({
